@@ -7,7 +7,7 @@ fi
 
 if [[ "$1" == "uboot" ]];then
     make distclean
-    make mx6ull_14x14_evk_emmc_defconfig
+    make mx6ull_100ask_emmc_defconfig
     make
 elif [[ "$1" == "flash" ]] && [[ -n $2 ]];then
     sudo dd if=u-boot-dtb.imx of=$2 bs=1k seek=1 conv=fsync
