@@ -7,7 +7,30 @@
  * of the License, or (at your option) any later version.
  */
 
-#include "imx6ull-14x14-evk.dts"
+/dts-v1/;
+
+#include "imx6ull.dtsi"
+#include "imx6ull-100ask-emmc.dtsi"
+#include "imx6ull-100ask-emmc-u-boot.dtsi"
+
+/ {
+	model = "i.MX6 ULL 100ASK EMMC Board";
+	compatible = "fsl,imx6ull-100ask-emmc", "fsl,imx6ull";
+};
+
+&clks {
+	assigned-clocks = <&clks IMX6UL_CLK_PLL3_PFD2>,
+			  <&clks IMX6UL_CLK_PLL4_AUDIO_DIV>;
+	assigned-clock-rates = <320000000>, <786432000>;
+};
+
+&csi {
+	status = "okay";
+};
+
+&ov5640 {
+	status = "okay";
+};
 
 &usdhc2 {
 	pinctrl-names = "default", "state_100mhz", "state_200mhz";
@@ -19,3 +42,4 @@
 	status = "okay";
 };
 
+/delete-node/ &sim2;
