@@ -25,6 +25,8 @@
 #include <env.h>
 #include <splash.h>
 #include <video.h>
+#include <fdtdec.h>
+#include <video_link.h>
 
 static struct splash_location default_splash_locations[] = {
 	{
@@ -139,12 +141,29 @@ void splash_display_banner(void)
 		return;
 
 #ifdef CONFIG_VIDEO_LOGO
-	col = BMP_LOGO_WIDTH / VIDEO_FONT_WIDTH + 1;
-	row = BMP_LOGO_HEIGHT / VIDEO_FONT_HEIGHT + 1;
+	int vxsize = 0, vysize = 0;
+	struct udevice *lcd_dev = video_link_get_video_device();
+	if (lcd_dev) {
+		vxsize = video_get_xsize(lcd_dev);
+		vysize = video_get_ysize(lcd_dev);
+		printf("Current video size: %u x %u\n", vxsize, vysize);
+	}
+	if ((vxsize > 0 && BMP_LOGO_WIDTH >= vxsize) ||
+		(vysize > 0 && BMP_LOGO_HEIGHT >= vysize)) {
+		col = 0;
+		row = 0;
+	} else {
+		col = BMP_LOGO_WIDTH / VIDEO_FONT_WIDTH + 1;
+		row = BMP_LOGO_HEIGHT / VIDEO_FONT_HEIGHT + 1;
+	}
 #else
 	col = 0;
 	row = 0;
 #endif
+
+	printf("BMP_LOGO_WIDTH: %d, BMP_LOGO_HEIGHT: %d\n", BMP_LOGO_WIDTH, BMP_LOGO_HEIGHT);
+	printf("VIDEO_FONT_WIDTH: %d, VIDEO_FONT_HEIGHT: %d\n", VIDEO_FONT_WIDTH, VIDEO_FONT_HEIGHT);
+	printf("banner col: %d, banner row: %d\n", col, row);
 
 	display_options_get_banner(false, buf, sizeof(buf));
 	vidconsole_position_cursor(dev, col, 1);

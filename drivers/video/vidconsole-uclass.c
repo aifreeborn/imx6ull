@@ -654,5 +654,7 @@ void vidconsole_position_cursor(struct udevice *dev, unsigned col, unsigned row)
 
 	x = min_t(short, col * priv->x_charsize, vid_priv->xsize - 1);
 	y = min_t(short, row * priv->y_charsize, vid_priv->ysize - 1);
+	printf("priv->x_charsize = %d, priv->y_charsize = %d, vid_priv->xsize = %d, vid_priv->ysize = %d\n",
+					priv->x_charsize, priv->y_charsize, vid_priv->xsize, vid_priv->ysize);
 	vidconsole_set_cursor_pos(dev, x, y);
 }
