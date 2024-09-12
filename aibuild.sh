@@ -5,6 +5,9 @@ if [ $# -ne 1 -a $# -ne 2 ];then
     exit
 fi
 
+export ARCH=arm
+export CROSS_COMPILE=arm-none-linux-gnueabihf-
+
 if [[ "$1" == "uboot" ]];then
     make distclean
     make mx6ull_100ask_emmc_defconfig
